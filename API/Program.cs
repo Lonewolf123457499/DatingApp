@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCors();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -16,10 +17,12 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseCors(policy =>
+{
+    policy.AllowAnyHeader()
+    .AllowAnyMethod()
+    .WithOrigins("http://localhost:4200");
+});
 
 app.MapControllers();
 
